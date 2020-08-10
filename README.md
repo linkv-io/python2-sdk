@@ -1,4 +1,5 @@
 [![API Reference](https://img.shields.io/badge/api-reference-blue.svg)]()
+![Python Version](https://img.shields.io/badge/python-2.7.9｜2.7.16｜2.7.18-blue.svg)
 [![Build Status](https://img.shields.io/static/v1?label=build&message=passing&color=32CD32)]()
 [![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/linkv-io/python-sdk/blob/master/LICENSE)
 
