@@ -34,4 +34,8 @@ _http = None
 
 
 def http(version=''):
-    return _http if _http is not None else _HTTP(version)
+    global _http
+    if _http:
+        return _http
+    _http = _HTTP(version)
+    return _http

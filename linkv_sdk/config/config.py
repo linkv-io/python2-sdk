@@ -4,11 +4,12 @@ from linkv_sdk.im.config import dict_config as dict_im_config
 from linkv_sdk.rtc.config import dict_config as dict_rtc_config
 from linkv_sdk.live.config import dict_config as dict_live_config
 from linkv_sdk.http.http import http
-from bindings.binding import download_library, binding
+from .bindings.binding import download_library, binding
+from linkv_sdk import __version__
 from json import loads
 
 
-def init(app_id, app_secret, version):
+def init(app_id, app_secret, version=__version__):
     http(version)
     if not download_library():
         return False

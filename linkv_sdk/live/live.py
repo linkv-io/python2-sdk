@@ -10,6 +10,34 @@ from .config import config
 from linkv_sdk.http.http import http
 
 
+class OrderType(object):
+    __slots__ = ['idx']
+
+    def __init__(self, idx):
+        self.idx = idx
+
+    def string(self):
+        return str(self.idx)
+
+
+class PlatformType(object):
+    __slots__ = ['value']
+
+    def __init__(self, value):
+        self.value = value
+
+    def string(self):
+        return self.value
+
+
+OrderAdd = OrderType(1)
+OrderDel = OrderType(2)
+
+PlatformH5 = PlatformType('h5')
+PlatformANDROID = PlatformType('android')
+PlatformIOS = PlatformType('ios')
+
+
 class Live(object):
     def __init__(self):
         pass
@@ -75,12 +103,12 @@ class Live(object):
             'app_id': config().app_key,
             'uid': live_open_id,
             'request_id': unique_id,
-            'type': str(order_type),
+            'type': order_type.string(),
             'value': str(gold),
             'money': str(money),
             'expriation': str(time.mktime(datetime.now().timetuple()) + expr * 86400),
             'channel': config().alias,
-            'platform': platform_type,
+            'platform': platform_type.string(),
         }
 
         if len(order_id) > 0:
@@ -119,7 +147,7 @@ class Live(object):
             'app_id': config().app_key,
             'uid': live_open_id,
             'request_id': unique_id,
-            'type': str(order_type),
+            'type': order_type.string(),
             'value': str(gold),
         }
         if expr > 0:
@@ -142,7 +170,10 @@ class Live(object):
 
         result = json.loads(response.read())
 
-        return int(result['status']) == 200
+        return {
+            'status': False,
+            'ok': int(result['status']) == 200,
+        }
 
     @staticmethod
     def GetGoldByLiveOpenID(live_open_id):
@@ -199,22 +230,21 @@ class LvLIVE(Live):
 
 
 def genRandomString():
-    container = ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8))
-    container += str(int(time.mktime(datetime.now().timetuple())))
-    container += ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8))
-    return container
+    return '{}{}{}'.format(
+        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8)),
+        str(int(time.mktime(datetime.now().timetuple()))),
+        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8)))
 
 
 def genSign(params, md5_secret):
     data = __encode(params) + "&key=" + md5_secret
     obj = hashlib.new('md5')
-    obj.update(data)
+    obj.update(data.decode(encoding='utf8'))
     return obj.hexdigest().lower()
 
 
 def __encode(params):
-    keys = params.keys()
-    keys.sort()
+    keys = sorted(params.keys())
     container = ''
     for k in keys:
         if len(container) > 0:

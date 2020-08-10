@@ -5,7 +5,7 @@ import linkv_sdk
 tests_require = []
 extras_require = {}
 install_requires = [
-    'requests'
+    'requests',
 ]
 
 setup(
@@ -37,8 +37,4 @@ setup(
         'License :: OSI Approved :: Apache-2.0 License',
         'Topic :: Utilities'
     ],
-    project_urls={
-        'Documentation': 'https://doc.linkv.sg',
-        'Source': 'https://github.com/linkv-io/python-sdk',
-    },
 )
