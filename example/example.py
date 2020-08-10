@@ -1,32 +1,3 @@
-[![API Reference](https://img.shields.io/badge/api-reference-blue.svg)]()
-[![Build Status](https://img.shields.io/static/v1?label=build&message=passing&color=32CD32)]()
-[![Apache V2 License](https://img.shields.io/badge/license-Apache%20V2-blue.svg)](https://github.com/linkv-io/python-sdk/blob/master/LICENSE)
-
-# python2-sdk
-
-LINKV SDK for the Python2 programming language.
-
-## Download
-```sh
-git clone https://github.com/linkv-io/python2-sdk
-```
-
-## Install
-```sh
-cd python2-sdk
-python setup.py build
-python setup.py install --record log
-```
-
-## Uninstall
-```sh
-cat log |xargs rm -rf
-rm -rf build dist linkv_sdk.egg-info log
-```
-
-## Usage
-
-```python
 # -*- coding: UTF-8 -*-
 
 from linkv_sdk import linkv_sdk
@@ -58,7 +29,7 @@ def main():
         return
     golds0 = r1['golds']
     print('golds0:%d' % golds0)
-    unique_id = '1231234'
+    unique_id = '123123123'
     gold = 10
     r2 = live.SuccessOrderByLiveOpenID(live_open_id, unique_id, linkv_sdk.OrderTypeAdd, gold, 10, 1,
                                        linkv_sdk.PlatformTypeH5, '')
@@ -72,7 +43,7 @@ def main():
         print('(golds0+gold) != golds1')
         return
 
-    unique_id1 = '456456'
+    unique_id1 = '456456456'
     ok = live.ChangeGoldByLiveOpenID(live_open_id, unique_id1, linkv_sdk.OrderTypeDel, gold, 1, 'test del')
     if not ok:
         print('!ok')
@@ -93,10 +64,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
-
-## License
-
-This SDK is distributed under the
-[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0),
-see LICENSE.txt and NOTICE.txt for more information.
