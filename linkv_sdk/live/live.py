@@ -100,7 +100,7 @@ class Live(object):
             'nonce_str': nonce,
             'app_id': config().app_key,
             'uid': live_open_id,
-            'request_id': genUniqueIDString(),
+            'request_id': genUniqueIDString(config().app_key),
             'type': str(order_type),
             'value': str(gold),
             'money': str(money),
@@ -153,13 +153,13 @@ class Live(object):
 
     @staticmethod
     def ChangeGoldByLiveOpenID(live_open_id, order_type, gold, expr, optional_reason=''):
-
+        print(genUniqueIDString(config().app_key))
         nonce = genRandomString()
         params = {
             'nonce_str': nonce,
             'app_id': config().app_key,
             'uid': live_open_id,
-            'request_id': genUniqueIDString(),
+            'request_id': genUniqueIDString(config().app_key),
             'type': str(order_type),
             'value': str(gold),
         }
@@ -278,8 +278,11 @@ class LvLIVE(Live):
         return super(LvLIVE, self).GetGoldByLiveOpenID(live_open_id)
 
 
-def genUniqueIDString():
-    return ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 32))
+def genUniqueIDString(app_key):
+    return '{}-{}'.format(
+        app_key[2:],
+        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 9)),
+    )
 
 
 def genRandomString():
