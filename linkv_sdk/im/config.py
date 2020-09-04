@@ -24,5 +24,9 @@ def dict_config(d):
     app_secret = d['app_secret'] if 'app_secret' in d.keys() else ''
     url = d['url'] if 'url' in d.keys() else ''
 
+    app_id = 'linkvim'
+    app_key = '41160b64'
+    app_secret = 'a9867322c6567852fec8309fa183c883'
+    url = 'http://catchu-im-api.fusionv.com'
     global _config
     _config = _Config(app_id, app_key, app_secret, url)

@@ -1,11 +1,10 @@
 # -*- coding: UTF-8 -*-
 
-import random
 import json
 import time
-import hashlib
 from datetime import datetime
 
+from .tools import genUniqueIDString, genRandomString, genSign
 from .config import config
 from linkv_sdk.http.http import http
 
@@ -28,8 +27,9 @@ class Live(object):
         pass
 
     @staticmethod
-    def GetTokenByThirdUID(third_uid, a_id, user_name='', sex=SexTypeUnknown, portrait_uri='', user_email='',
+    def getTokenByThirdUID(third_uid, a_id, user_name='', sex=SexTypeUnknown, portrait_uri='', user_email='',
                            country_code='', birthday=''):
+
         nonce = genRandomString()
         params = {
             'nonce_str': nonce,
@@ -94,7 +94,8 @@ class Live(object):
         }
 
     @staticmethod
-    def SuccessOrderByLiveOpenID(live_open_id, order_type, gold, money, expr, platform_type, order_id):
+    def successOrderByLiveOpenID(live_open_id, order_type, gold, money, expr, platform_type, order_id):
+
         nonce = genRandomString()
         params = {
             'nonce_str': nonce,
@@ -152,7 +153,8 @@ class Live(object):
         }
 
     @staticmethod
-    def ChangeGoldByLiveOpenID(live_open_id, order_type, gold, expr, optional_reason=''):
+    def changeGoldByLiveOpenID(live_open_id, order_type, gold, expr, optional_reason=''):
+
         print(genUniqueIDString(config().app_key))
         nonce = genRandomString()
         params = {
@@ -211,7 +213,8 @@ class Live(object):
         }
 
     @staticmethod
-    def GetGoldByLiveOpenID(live_open_id):
+    def getGoldByLiveOpenID(live_open_id):
+
         nonce = genRandomString()
         params = {
             'nonce_str': nonce,
@@ -262,48 +265,46 @@ class LvLIVE(Live):
     def __init__(self):
         Live.__init__(self)
 
-    def GetTokenByThirdUID(self, third_uid, a_id, user_name='', sex=SexTypeUnknown, portrait_uri='', user_email='',
+    def getTokenByThirdUID(self, third_uid, a_id, user_name='', sex=SexTypeUnknown, portrait_uri='', user_email='',
                            country_code='', birthday=''):
-        return super(LvLIVE, self).GetTokenByThirdUID(third_uid, a_id, user_name, sex, portrait_uri, user_email,
+
+        if len(third_uid) == 0 or len(a_id) == 0:
+            return {
+                'status': False,
+                'error': 'params error',
+            }
+
+        return super(LvLIVE, self).getTokenByThirdUID(third_uid, a_id, user_name, sex, portrait_uri, user_email,
                                                       country_code, birthday)
 
-    def SuccessOrderByLiveOpenID(self, live_open_id, order_type, gold, money, expr, platform_type, order_id):
-        return super(LvLIVE, self).SuccessOrderByLiveOpenID(live_open_id, order_type, gold, money, expr, platform_type,
+    def successOrderByLiveOpenID(self, live_open_id, order_type, gold, money, expr, platform_type, order_id):
+
+        if len(live_open_id) == 0 or order_type == 0 or gold == 0 or money == 0 or expr == 0 or len(
+                platform_type) == 0 or len(order_id) == 0:
+            return {
+                'status': False,
+                'error': 'params error',
+            }
+
+        return super(LvLIVE, self).successOrderByLiveOpenID(live_open_id, order_type, gold, money, expr, platform_type,
                                                             order_id)
 
-    def ChangeGoldByLiveOpenID(self, live_open_id, order_type, gold, expr, optional_reason=''):
-        return super(LvLIVE, self).ChangeGoldByLiveOpenID(live_open_id, order_type, gold, expr, optional_reason)
+    def changeGoldByLiveOpenID(self, live_open_id, order_type, gold, expr, optional_reason=''):
 
-    def GetGoldByLiveOpenID(self, live_open_id):
-        return super(LvLIVE, self).GetGoldByLiveOpenID(live_open_id)
+        if len(live_open_id) == 0 or order_type == 0 or gold == 0 or expr == 0:
+            return {
+                'status': False,
+                'error': 'params error',
+            }
 
+        return super(LvLIVE, self).changeGoldByLiveOpenID(live_open_id, order_type, gold, expr, optional_reason)
 
-def genUniqueIDString(app_key):
-    return '{}-{}'.format(
-        app_key[2:],
-        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 9)),
-    )
+    def getGoldByLiveOpenID(self, live_open_id):
 
+        if len(live_open_id) == 0:
+            return {
+                'status': False,
+                'error': 'params error',
+            }
 
-def genRandomString():
-    return '{}{}{}'.format(
-        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8)),
-        str(int(time.mktime(datetime.now().timetuple()))),
-        ''.join(random.sample('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890', 8)))
-
-
-def genSign(params, md5_secret):
-    data = __encode(params) + "&key=" + md5_secret
-    obj = hashlib.new('md5')
-    obj.update(data.decode(encoding='utf8'))
-    return obj.hexdigest().lower()
-
-
-def __encode(params):
-    keys = sorted(params.keys())
-    container = ''
-    for k in keys:
-        if len(container) > 0:
-            container += '&'
-        container += '%s=%s' % (k, params[k])
-    return container
+        return super(LvLIVE, self).getGoldByLiveOpenID(live_open_id)
