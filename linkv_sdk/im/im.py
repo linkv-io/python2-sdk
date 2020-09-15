@@ -35,6 +35,7 @@ class Im(object):
             'nonce': nonce,
             'timestamp': timestamp,
             'cmimToken': cmimToken,
+            'signature': cmimToken,
             'sign': sign,
             'appkey': config().app_key,
             'appUid': third_uid,
@@ -99,7 +100,6 @@ class Im(object):
             'sign': sign,
             'appkey': config().app_key,
             'appId': config().app_id,
-            'signature': sign,
         }
 
         params = {
